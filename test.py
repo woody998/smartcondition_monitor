@@ -12,11 +12,7 @@ from sensors import AM2301,WZ_S,MY_GPS
 def main():
 	last_print = monotonic()
 	myGPS = MY_GPS('/dev/ttyUSB0')
-	myGPS.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
-	#myGPS.gps.send_command(b'PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
-	sleep(0.2)
-	myGPS.gps.send_command(b'PMTK220,1000')
-	sleep(0.2)
+	myGPS.gps_config()
 
 	myIoT = aliyun_iot()
 	client = myIoT.getAliyunIoTClient()

@@ -94,6 +94,7 @@ class MY_GPS(object):
 		self.baudrate = baudrate
 		self.timeout = timeout
 		self.port = port
+		self.isconfigured = False
 
 		self.uart = serial.Serial(
 			port = self.port,
@@ -119,3 +120,12 @@ class MY_GPS(object):
 			return True
 		else:
 			return False
+
+	def gps_config(self):
+		self.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
+		sleep(0.2)
+		self.gps.send_command(b'PMTK220,1000')
+		sleep(0.2)
+		self.isconfigured = True
+
+
