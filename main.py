@@ -42,13 +42,13 @@ def main():
 				altitude = myGPS.gps.altitude_m
 				speed = myGPS.gps.speed_knots
 				height_geoid = myGPS.gps.height_geoid
-				#print("[ OK ] \t lat: %.6f \t lon: %.6f \t sat: %d, alt: %.3f \t spd: %.3f \t heig_geoid: %.3f" %(latitude, longtitude, satellites, altitude, speed, height_geoid))
+				print("[ OK ] \t lat: %.6f \t lon: %.6f \t sat: %d, alt: %.3f \t spd: %.3f \t heig_geoid: %.3f" %(latitude, longtitude, satellites, altitude, speed, height_geoid))
 				break
 
 		if humidity is not None and temperature is not None and hcho is not None:
 			if current - last_print >= 10.0:
 				last_print = current
-				payload = myIoT.build_prop_json_payload(temperature, humidity, hcho, longtitude, latitude, altitude)
+				payload = myIoT.build_prop_json_payload(int(temperature), int(humidity), hcho, longtitude, latitude, altitude)
 				client.publish(topic = myIoT.pub_topic, payload = str(payload), qos = 1)
 				print("[ OK ]\t heartbeat: %d \t hum: %f \t temp: %f \t hcho:%f \t lat: %f \t lon: %f \t alt: %f" % (myIoT.heartbeat,humidity,temperature,hcho,myGPS.gps.latitude,myGPS.gps.longitude,100.9))
 		sleep(1)	
