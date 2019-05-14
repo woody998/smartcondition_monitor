@@ -50,7 +50,7 @@ def main():
 				last_print = current
 				payload = myIoT.build_prop_json_payload(int(temperature), int(humidity), hcho, longtitude, latitude, altitude)
 				client.publish(topic = myIoT.pub_topic, payload = str(payload), qos = 1)
-				print("[ OK ]\t heartbeat: %d \t hum: %f \t temp: %f \t hcho:%f \t lat: %f \t lon: %f \t alt: %f" % (myIoT.heartbeat,humidity,temperature,hcho,myGPS.gps.latitude,myGPS.gps.longitude,100.9))
+				print("[ OK ]\t heartbeat: %d \t hum: %f \t temp: %f \t hcho:%f \t lat: %f \t lon: %f \t alt: %f" % (myIoT.heartbeat,humidity,temperature,hcho,myGPS.gps.latitude,myGPS.gps.longitude,myGPS.gps.altitude_m))
 		sleep(1)	
 
 if __name__ == "__main__":
