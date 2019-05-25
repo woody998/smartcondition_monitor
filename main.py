@@ -3,6 +3,8 @@
 # Copyright (c) 2019 Deliang Wang
 # See LICENSE.rst for details.
 
+import configparser
+import os.path
 from time import sleep,monotonic
 import datetime
 from sensors import AM2301,WZ_S,MY_GPS
@@ -12,17 +14,20 @@ from thing_alink import aliyun_iot
 
 def main():
 	last_print = monotonic()
-	myWZ_S = WZ_S("/dev/ttyUSB0",9600)
+	config = configparser.ConfigParser()
+	cfg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'default.cfg'))
+	config.read(cfg_path)
+	myWZ_S = WZ_S(config.get('dart_wzs','serial_port'), baud_rate = int(config.get('dart_wzs','baudrate')))
 	myWZ_S.getConnected()
 	myWZ_S.changeMode()
-	myAM2301 = AM2301(22)
+	myAM2301 = AM2301(int(config['am2301']['gpio_bcm']))
 	myOLED = WS_RGB_OLED()
-	myGPS = MY_GPS('/dev/ttyUSB1')
+	myGPS = MY_GPS(config['gps']['serial_port'])
 	myGPS.gps_config()
 
 	myIoT = aliyun_iot()
 	client = myIoT.getAliyunIoTClient()
-	client.connect_async(host = myIoT.host, port = myIoT.port, keepalive = 60)
+	client.connect_async(host = myIoT.host, port = int(config['alicloud']['port']), keepalive = int(config['alicloud']['keepalive']))
 	client.loop_start()
 	client.subscribe(topic = myIoT.sub_topic_propset)
 
